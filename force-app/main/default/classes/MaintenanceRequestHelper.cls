@@ -46,10 +46,10 @@ public with sharing class MaintenanceRequestHelper {
     List<Case> updatedCases,
     Map<Id, Case> originalCases
   ) {
-    // create set to hold relevant case Ids
+    // create set to hold relevant case Ids. relevant meaning the cases we're going to work with
     Set<Id> relevantcaseIds = new Set<Id>();
 
-    // write logic to add relvant case Ids to the relevantcaseId set
+    // write logic to add relevant case Ids to the relevantcaseId set
     for (Case c : updatedCases) {
       if (
         (c.Type == 'Repair' || c.Type == 'Routine Maintenance') &&
@@ -63,6 +63,7 @@ public with sharing class MaintenanceRequestHelper {
     // make sure you actually have some relevant cases to work with
     if (!relevantcaseIds.isEmpty()) {
       // create agg. result array that holds every equipment maintenance item record that has the related equipment record with the shortest maintenance cycle for each maintenance request that meets our criteria (aka in 'validIds' set). these records will help us set the due date for reach maintenance request due date (particulary the maintenance cycle for each record)
+      // note: an AggregateResult is a special sObject type used to store the results of aggregate queries (queries using aggregate functions like COUNT, SUM, AVG, etc.)
       // note: can access related record "Equipment__r" even though is not defined as a field for
       // the  "Equipment_Maintenance_Item__c" object. Just need "Equipment__c" defined on the
       // "Equipment_Maintenance_Item__c" object.
@@ -72,7 +73,7 @@ public with sharing class MaintenanceRequestHelper {
       AggregateResult[] shortestMaintCycles = [
         SELECT
           Maintenance_Request__c,
-          MIN(Equipment__r.Maintenance_Cycle__c) maintCycle
+          MIN(Equipment__r.Maintenance_Cycle__c) maintCycle // maintCycle = name of the MIN() result
         FROM Equipment_Maintenance_Item__c
         WHERE Maintenance_Request__c IN :relevantcaseIds
         GROUP BY Maintenance_Request__c

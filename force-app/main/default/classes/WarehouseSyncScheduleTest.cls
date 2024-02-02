@@ -5,7 +5,7 @@
 public with sharing class WarehouseSyncScheduleTest {
   @isTest
   static void WarehouseSyncScheduleTest() {
-    //TODO create schedule time string
+    //TODO create schedule time string (run daily at 1AM)
     String scheduleTime = '00 00 01 * * ?';
     //TODO set up mock callout and create schedule job, save the id in a string
     test.startTest();
