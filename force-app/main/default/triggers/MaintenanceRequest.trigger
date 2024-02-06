@@ -11,15 +11,10 @@
  */
 
 /**
- * TODO: create trigger named MaintenanceRequest. since we're not trying to prevent an update, we'll just have it trigger after update.
+ * TODO: create trigger named MaintenanceRequest. We nee both the before update and after update parameter. the before update parameter allows you access the records before they update and the after update parameter allows you to access the records after you update.
  * TODO: call trigger handler method and pass updated list and non-updated map of maintenance requests.
  *  See handler class comments for reasoning.
  */
-/*
-trigger MaintenanceRequest on Case(after update) {
-  MaintenanceRequestHelper.onAfterUpdate(Trigger.new, Trigger.oldMap);
-}
-*/
 
 trigger MaintenanceRequest on Case(before update, after update) {
   if (Trigger.isUpdate && Trigger.isAfter) {
